@@ -18,28 +18,30 @@ const storage = multer.diskStorage({
 // @desc Create a new course
 // @access Admin (Protected)
 router.post('/courses', upload.fields([{ name: 'thumbnail' }, { name: 'videos' }]), async (req, res) => {
-    const { title, description } = req.body;
-    const thumbnail = req.files.thumbnail ? req.files.thumbnail[0].path : req.body.thumbnailUrl; // get thumbnail path or URL
-    const videoUrls = req.body.videoUrls ? req.body.videoUrls.split(',') : [];
-    const videoFiles = req.files.videos ? req.files.videos.map(video => video.path) : [];
-  
-    const videos = [...videoFiles, ...videoUrls]; // Combine file uploads and URLs
-  
-    try {
-      const newCourse = new Course({
-        title,
-        description,
-        thumbnail,
-        videos,
-      });
-  
-      const course = await newCourse.save();
-      res.status(201).json(course);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ msg: 'Server error' });
-    }
-  });
+  const { title, description } = req.body;
+  const thumbnail = req.files.thumbnail ? req.files.thumbnail[0].path : req.body.thumbnailUrl; // get thumbnail path or URL
+  const videoUrls = Array.isArray(req.body.videoUrls) ? req.body.videoUrls : [req.body.videoUrls]; // Ensure it's an array
+  const videoFiles = req.files.videos ? req.files.videos.map(video => video.path) : [];
+
+  const videos = [...videoFiles, ...videoUrls.filter(Boolean)]; // Combine file uploads and URLs, filtering out any empty values
+
+  try {
+    const newCourse = new Course({
+      title,
+      description,
+      thumbnail,
+      videos,
+    });
+
+    const course = await newCourse.save();
+    res.status(201).json(course);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+
   
 // @route GET /api/admin/courses
 // @desc Get all courses
@@ -185,6 +187,36 @@ router.delete('/quizzes/:quizId', auth, async (req, res) => {
         console.error(error.message);
         res.status(500).json({ msg: 'Server error' });
     }
+});
+
+// @route GET /api/quizzes/:quizId
+// @desc Get a single quiz by ID
+// @access Admin (Protected)
+router.get('/quizzes/:quizId', auth, async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.quizId);
+    if (!quiz) {
+      return res.status(404).json({ msg: 'Quiz not found' });
+    }
+    res.json(quiz);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Get course details by ID
+router.get('/course-details/:id', async (req, res) => {
+  try {
+      const course = await Course.findById(req.params.id);
+      if (!course) {
+          return res.status(404).json({ msg: 'Course not found' });
+      }
+      res.status(200).json(course);
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 

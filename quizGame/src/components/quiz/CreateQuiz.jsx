@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+
+// Sample logo style
+const logoStyle = {
+  fontFamily: "'Comic Sans MS', cursive, sans-serif",
+  fontSize: '24px',
+  color: '#EAB8E4',
+  fontWeight: 'bold',
+};
 
 const CreateQuiz = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  
+
   // Initial form state with title and questions
   const [formData, setFormData] = useState({
     title: '',
@@ -21,7 +29,7 @@ const CreateQuiz = () => {
     if (name === 'questionText') {
       updatedQuestions[questionIndex].questionText = value;
     }
-    
+
     // Handle option text
     if (name.startsWith('optionText')) {
       updatedQuestions[questionIndex].options[optionIndex].text = value;
@@ -76,10 +84,29 @@ const CreateQuiz = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">Create New Quiz</h2>
-        
+    <div className="bg-gray-900 min-h-screen p-8 text-gray-100">
+      {/* Navbar */}
+      <nav className="flex justify-between items-center mb-6 p-4 bg-gray-800 rounded-lg shadow-lg">
+        <div style={logoStyle}>Quiz Game</div>
+        <div>
+          <Link
+            to="/dashboard"
+            className="text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-300 mr-4"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/login"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-500 hover:to-purple-500 transition duration-300"
+          >
+            Sign In
+          </Link>
+        </div>
+      </nav>
+
+      <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-md p-8">
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">Create New Quiz</h2>
+
         <form onSubmit={handleSubmit}>
           {/* Quiz Title Input */}
           <input
@@ -88,14 +115,14 @@ const CreateQuiz = () => {
             placeholder="Enter Quiz Title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="mb-6 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mb-6 w-full p-3 border border-gray-700 bg-gray-700 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-          
+
           {/* Questions and Options */}
           {formData.questions.map((question, index) => (
-            <div key={index} className="mb-6 bg-gray-50 p-6 rounded-lg shadow-sm border">
-              <h3 className="text-xl font-semibold mb-4 text-blue-600">Question {index + 1}</h3>
+            <div key={index} className="mb-6 bg-gray-700 p-6 rounded-lg shadow-sm border border-gray-600">
+              <h3 className="text-xl font-semibold mb-4 text-blue-400">Question {index + 1}</h3>
 
               <input
                 type="text"
@@ -103,7 +130,7 @@ const CreateQuiz = () => {
                 placeholder="Enter Question Text"
                 value={question.questionText}
                 onChange={(e) => handleChange(e, index)}
-                className="mb-4 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mb-4 w-full p-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
 
@@ -116,7 +143,7 @@ const CreateQuiz = () => {
                     placeholder={`Option ${optionIndex + 1}`}
                     value={option.text}
                     onChange={(e) => handleChange(e, index, optionIndex)}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-600 bg-gray-700 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   <label className="flex items-center">
@@ -142,7 +169,7 @@ const CreateQuiz = () => {
               </button>
             </div>
           ))}
-          
+
           {/* Add Question Button */}
           <button
             type="button"
@@ -151,7 +178,7 @@ const CreateQuiz = () => {
           >
             + Add Question
           </button>
-          
+
           {/* Submit Button */}
           <button
             type="submit"

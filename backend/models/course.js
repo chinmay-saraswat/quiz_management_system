@@ -17,6 +17,11 @@ const CourseSchema = new mongoose.Schema({
       type: String, // Array of video URLs
     },
   ],
+  tutorials: [
+    {
+      type: String, // Array of text-based tutorials
+    },
+  ],
   quizzes: [
     {
       type: mongoose.Schema.Types.ObjectId,

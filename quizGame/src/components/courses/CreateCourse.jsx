@@ -7,6 +7,7 @@ const CreateCourse = () => {
   const [description, setDescription] = useState('');
   const [thumbnail, setThumbnail] = useState({ url: '', file: null });
   const [videos, setVideos] = useState([{ url: '', file: null }]);
+  const [tutorials, setTutorials] = useState(['']);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -33,6 +34,9 @@ const CreateCourse = () => {
       }
     });
 
+    // Append tutorials to formData
+    formData.append('tutorials', JSON.stringify(tutorials));
+
     try {
       const response = await axios.post('http://localhost:5000/api/admin/courses', formData, {
         headers: {
@@ -48,6 +52,10 @@ const CreateCourse = () => {
 
   const addVideoField = () => {
     setVideos([...videos, { url: '', file: null }]);
+  };
+
+  const addTutorialField = () => {
+    setTutorials([...tutorials, '']); // Add a new tutorial text field
   };
 
   return (
@@ -84,7 +92,6 @@ const CreateCourse = () => {
           onChange={(e) => setThumbnail({ ...thumbnail, url: e.target.value, file: null })}
           className="w-full p-2 border border-gray-300 rounded mb-2"
         />
-        
       </div>
 
       <div className="mb-4">
@@ -102,10 +109,29 @@ const CreateCourse = () => {
               }}
               className="w-full p-2 border border-gray-300 rounded mb-2"
             />
-           
           </div>
         ))}
         <button type="button" onClick={addVideoField} className="text-blue-500">Add Another Video</button>
+      </div>
+
+      {/* Tutorials section */}
+      <div className="mb-4">
+        <label className="block mb-1">Tutorial(s):</label>
+        {tutorials.map((tutorial, index) => (
+          <div key={index} className="mb-2">
+            <textarea
+              placeholder={`Tutorial ${index + 1}`}
+              value={tutorial}
+              onChange={(e) => {
+                const newTutorials = [...tutorials];
+                newTutorials[index] = e.target.value;
+                setTutorials(newTutorials);
+              }}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+        ))}
+        <button type="button" onClick={addTutorialField} className="text-blue-500">Add Another Tutorial</button>
       </div>
 
       <button type="submit" className="bg-blue-500 text-white w-full p-2 rounded">Create Course</button>
