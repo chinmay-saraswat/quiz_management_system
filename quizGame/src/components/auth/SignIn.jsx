@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState(''); // State to hold error messages
+  const [error, setError] = useState(''); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(''); // Clear error message on input change
+    setError(''); 
   };
 
   const handleSubmit = async (e) => {
@@ -20,7 +20,7 @@ const SignIn = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Invalid credentials');
-      setError('Invalid email or password'); // Set error message
+      setError('Invalid email or password'); 
     }
   };
 
