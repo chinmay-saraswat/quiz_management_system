@@ -3,34 +3,45 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' }); // Changed username to name
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [error, setError] = useState(''); // State to hold error messages
+  const [loading, setLoading] = useState(false); // State for loading
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(''); // Clear error message on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await axios.post('http://localhost:5000/api/auth/signup', formData);
+      setLoading(false);
       navigate('/signin');
     } catch (error) {
       console.error(error);
+      setError('Something went wrong. Please try again.'); // Display error message
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <form className="w-full max-w-md p-8 bg-white shadow-md rounded" onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-bold mb-6">Admin Signup</h2>
+    <div className="flex justify-center items-center h-screen bg-gray-900">
+      <form className="w-full max-w-md p-8 bg-gray-800 shadow-lg rounded-lg" onSubmit={handleSubmit}>
+        <h2 className="text-3xl font-bold text-white mb-6 text-center">Admin Sign Up</h2>
+        
+        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
+        
         <input
           type="text"
-          name="name"  // Updated this from 'username' to 'name'
+          name="name"
           placeholder="Name"
           value={formData.name}
           onChange={handleChange}
-          className="mb-4 w-full p-2 border border-gray-300 rounded"
+          className="mb-4 w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          required
         />
         <input
           type="email"
@@ -38,7 +49,8 @@ const SignUp = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          className="mb-4 w-full p-2 border border-gray-300 rounded"
+          className="mb-4 w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          required
         />
         <input
           type="password"
@@ -46,9 +58,25 @@ const SignUp = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="mb-4 w-full p-2 border border-gray-300 rounded"
+          className="mb-4 w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          required
         />
-        <button type="submit" className="bg-blue-500 w-full text-white p-2 rounded">Sign Up</button>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full p-3 rounded bg-blue-600 text-white hover:bg-blue-500 transition duration-300 focus:outline-none ${loading ? 'cursor-not-allowed' : ''}`}
+        >
+          {loading ? 'Signing Up...' : 'Sign Up'}
+        </button>
+
+        <div className="mt-6 text-center">
+          <p className="text-gray-400">Already have an account? 
+            <span className="text-blue-400 hover:underline ml-2 cursor-pointer" onClick={() => navigate('/signin')}>
+              Sign In
+            </span>
+          </p>
+        </div>
       </form>
     </div>
   );
