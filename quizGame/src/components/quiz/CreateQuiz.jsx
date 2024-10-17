@@ -96,10 +96,10 @@ const CreateQuiz = () => {
             Dashboard
           </Link>
           <Link
-            to="/login"
+            to="/signin"
             className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-500 hover:to-purple-500 transition duration-300"
           >
-            Sign In
+           Logout
           </Link>
         </div>
       </nav>

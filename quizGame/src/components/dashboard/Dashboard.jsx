@@ -56,8 +56,11 @@ const Dashboard = () => {
           <Link to="/course/create" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg mr-4 hover:from-blue-500 hover:to-purple-500 transition duration-300">
             Create Course
           </Link>
-          <Link to="/signin" className="text-white py-2 px-4 rounded-lg bg-blue-600 hover:bg-blue-500 transition duration-300">
-            Sign In
+          <Link
+            to="/signin"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-500 hover:to-purple-500 transition duration-300"
+          >
+           Logout
           </Link>
         </div>
       </nav>
