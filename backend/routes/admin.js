@@ -2,28 +2,28 @@ const express = require('express');
 const router = express.Router();
 const Course = require('../models/course');
 const Quiz = require('../models/quiz');
-const auth = require('../routes/auth'); // Middleware to protect routes
+const auth = require('../routes/auth'); 
 const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'uploads/'); // specify your upload folder
+      cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname); // rename the file
+      cb(null, Date.now() + '-' + file.originalname); 
     },
   });
   const upload = multer({ storage });
 // @route POST /api/admin/courses
 // @desc Create a new course
-// @access Admin (Protected)
+
 router.post('/courses', upload.fields([{ name: 'thumbnail' }, { name: 'videos' }]), async (req, res) => {
   const { title, description } = req.body;
-  const thumbnail = req.files.thumbnail ? req.files.thumbnail[0].path : req.body.thumbnailUrl; // get thumbnail path or URL
-  const videoUrls = Array.isArray(req.body.videoUrls) ? req.body.videoUrls : [req.body.videoUrls]; // Ensure it's an array
+  const thumbnail = req.files.thumbnail ? req.files.thumbnail[0].path : req.body.thumbnailUrl;
+  const videoUrls = Array.isArray(req.body.videoUrls) ? req.body.videoUrls : [req.body.videoUrls]; 
   const videoFiles = req.files.videos ? req.files.videos.map(video => video.path) : [];
 
-  const videos = [...videoFiles, ...videoUrls.filter(Boolean)]; // Combine file uploads and URLs, filtering out any empty values
+  const videos = [...videoFiles, ...videoUrls.filter(Boolean)]; 
 
   try {
     const newCourse = new Course({
@@ -45,7 +45,7 @@ router.post('/courses', upload.fields([{ name: 'thumbnail' }, { name: 'videos' }
   
 // @route GET /api/admin/courses
 // @desc Get all courses
-// @access Admin (Protected)
+
 router.get('/courses', auth, async (req, res) => {
     try {
       const courses = await Course.find();
@@ -58,7 +58,7 @@ router.get('/courses', auth, async (req, res) => {
 
 // @route PUT /api/admin/courses/:id
 // @desc Update a course
-// @access Admin (Protected)
+
 router.put('/courses/:id', auth, async (req, res) => {
     const { title, description, thumbnail, videos } = req.body;
   
@@ -68,7 +68,7 @@ router.put('/courses/:id', auth, async (req, res) => {
         return res.status(404).json({ msg: 'Course not found' });
       }
   
-      // Update fields
+    
       course.title = title || course.title;
       course.description = description || course.description;
       course.thumbnail = thumbnail || course.thumbnail;
@@ -84,7 +84,7 @@ router.put('/courses/:id', auth, async (req, res) => {
 
 // @route DELETE /api/admin/courses/:id
 // @desc Delete a course
-// @access Admin (Protected)
+
 router.delete('/courses/:id', auth, async (req, res) => {
     try {
       const course = await Course.findById(req.params.id);
@@ -92,7 +92,7 @@ router.delete('/courses/:id', auth, async (req, res) => {
         return res.status(404).json({ msg: 'Course not found' });
       }
   
-      // Use findByIdAndDelete to delete the course
+     
       await Course.findByIdAndDelete(req.params.id);
       res.status(204).json({ msg: 'Course deleted' });  // 204 No Content
     } catch (error) {
@@ -168,11 +168,8 @@ router.put('/quizzes/:quizId', auth, async (req, res) => {
 });
 
 // @route DELETE /api/admin/quizzes/:quizId
+
 // @desc Delete a quiz
-// @access Admin (Protected)
-// @route DELETE /api/admin/quizzes/:quizId
-// @desc Delete a quiz
-// @access Admin (Protected)
 router.delete('/quizzes/:quizId', auth, async (req, res) => {
     try {
         const quiz = await Quiz.findById(req.params.quizId);
@@ -191,7 +188,7 @@ router.delete('/quizzes/:quizId', auth, async (req, res) => {
 
 // @route GET /api/quizzes/:quizId
 // @desc Get a single quiz by ID
-// @access Admin (Protected)
+
 router.get('/quizzes/:quizId', auth, async (req, res) => {
   try {
     const quiz = await Quiz.findById(req.params.quizId);
