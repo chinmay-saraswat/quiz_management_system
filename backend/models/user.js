@@ -5,10 +5,9 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin'], default: 'admin' } // Only admin role
+  role: { type: String, enum: ['admin'], default: 'admin' }
 }, { timestamps: true });
 
-// Hash the password before saving the user
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -16,7 +15,6 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// Method to compare passwords
 UserSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };

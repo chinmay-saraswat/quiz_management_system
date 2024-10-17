@@ -4,11 +4,11 @@ const QuizSchema = new mongoose.Schema({
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
   questions: [
     {
-      questionText: { type: String, required: true },  // Ensure question text is required
+      questionText: { type: String, required: true },  
       options: [
         {
-          text: { type: String, required: true },  // Option text is required
-          isCorrect: { type: Boolean, required: true }  // Mark whether the option is correct
+          text: { type: String, required: true },  
+          isCorrect: { type: Boolean, required: true } 
         }
       ],
     },

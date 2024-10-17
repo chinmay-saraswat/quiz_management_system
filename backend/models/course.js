@@ -10,22 +10,22 @@ const CourseSchema = new mongoose.Schema({
     required: true,
   },
   thumbnail: {
-    type: String, // URL or path of the image file
+    type: String, 
   },
   videos: [
     {
-      type: String, // Array of video URLs
+      type: String, 
     },
   ],
   tutorials: [
     {
-      type: String, // Array of text-based tutorials
+      type: String, 
     },
   ],
   quizzes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Quiz', // Array of quizzes linked to this course
+      ref: 'Quiz', 
     },
   ],
 });

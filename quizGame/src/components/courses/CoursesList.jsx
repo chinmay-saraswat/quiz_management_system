@@ -1,11 +1,11 @@
 // CourseList.jsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate from React Router
+import { useNavigate } from 'react-router-dom';  
 import axios from 'axios';
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
-  const navigate = useNavigate();  // Initialize the navigate function
+  const navigate = useNavigate();  
 
   useEffect(() => {
     const fetchCourses = async () => {

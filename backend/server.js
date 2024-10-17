@@ -10,10 +10,10 @@ const cors = require('cors');
 dotenv.config();
 const app = express();
 
-app.use(express.json());//-> for converting or parsing json request
+app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from your frontend running on localhost:5173
-    credentials: true // Allow credentials like cookies and HTTP authentication
+    origin: 'http://localhost:5173', 
+    credentials: true 
   }));
 
 
@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGO_URL
         })
     })
 
-    app.use('/api/auth', authRoutes); // Use the auth routes
+    app.use('/api/auth', authRoutes); 
     app.use('/api/admin', adminRoutes);
 
     const PORT = process.env.PORT || 5000;
